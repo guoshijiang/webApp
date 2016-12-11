@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://cdn.wilddog.com/docs/demo/sync.html -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<meta name="viewport" content="width=640, user-scalable=no">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			width: 100%;
+			height: 100%;
+
+		}
+		input {
+			display: block;
+			width: 50%;
+			height: 50px;
+			border-radius: 20px;
+			outline: none;
+			font:500 30px "Microsoft YaHei";
+			margin-bottom: 5px;
+			margin-left: 3%;
+			text-indent: 20px;
+		}
+		#zhufu {
+			opacity: 0.8;
+		}
+		#nam {
+			margin-top: 8%;
+		}
+		.inps {
+			clear: both;
+			overflow: hidden;
+		}
+		.btn {
+			width: 25%;
+			background-color: #FF0000;
+			float: left;
+
+
+		}
+		#tx {
+			width: 90%;
+			margin: 10px 4%;
+			border: none;
+			line-height: 30px;
+			font-size: 30px;
+			color:blue;
+			text-align: center;
+
+
+		}
+		h2 {
+			text-align: center;
+			margin-top: 5%;
+			font-size: 40px;
+		}
+	</style>
+</head>
+<body onload="onValue()">
+ <div id="zhufu">
+	 <div class="inps">
+		 <input type="text" id="nam" placeholder="请输入姓名">
+		 <input type="number" id="num" placeholder="应邀人数">
+		 <input type="number" id="tel" placeholder="请输入电话">
+		 <input type="text" id="msg" placeholder="留言">
+		 <input type="button" class="btn" onclick="onAdd()" value="发送">
+		 <input type="button" class="btn"  value="关闭">
+	 </div>
+
+	 <h2>留言板:</h2>
+<div style="overflow-x:scroll;overflow-y:scroll;"
+		   id="tx">
+</div>
+
+
+ </div>
+
+	
+		
+	<div id="commentDialogWarp">
+		<ul id="mymessages" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+			
+			<li class="mymessagec0">
+				<div>姓名：乐 (08-31 13:54)</div>
+				<div>祝福：恭喜啊</div>
+			</li>
+			
+			<li class="mymessagec1">
+				<div>姓名：乐 (08-31 13:53)</div>
+				<div>祝福：恭喜</div>
+			</li>
+			
+		</ul>
+	</div>	
+		
+ <script src="./dogTest_files/wilddog.js"></script>
+ <script>
+    var tx = document.getElementById("tx");
+    function onValue() {
+        var url = "https://wedding1002.wilddogio.com";
+        var ref = new Wilddog(url);
+		ref.on("value",function(snapshot){
+      var i=1;
+		snapshot.forEach(function(snap){
+		if(snap.val().msg!="")
+		 	var msg = "";
+		 	var context = ""
+		 	i++;
+		 	//创建标签并添加内容
+			var li = document.createElement("li");
+			if(i%2==0){
+				li.setAttribute("class","mymessagec0");
+			}else{
+				li.setAttribute("class","mymessagec1");
+			}
+			var div1 = document.createElement("div");
+			var div2 = document.createElement("div");
+			//添加名字
+			msg ="姓名："+ snap.val().nam;
+			var txt = document.createTextNode(msg);
+			div1.appendChild(txt);
+			li.appendChild(div1);
+			
+			//添加留言
+			context = "祝福：" +snap.val().msg;
+			var txts = document.createTextNode(context);
+			div2.appendChild(txts);
+			li.appendChild(div2);
+			tx.appendChild(li);
+			
+			
+		});
+		
+		
+	});
+    }
+    
+    var getTimeNow = function (date){
+				var time = date;
+				var h = time.getHours();
+				var mm = time.getMonth()+1;
+				if(mm<10){
+					mm="0"+mm;
+				}
+				var dd = time.getDate();
+				if(dd<10){
+					dd="0"+dd;
+				}
+				if(h<10){
+					h="0"+h;
+				}
+				var m =time.getMinutes();
+				if(m<10){
+					m="0"+m;
+				}
+
+				var timeStr = mm+"-"+dd+" "+h+":"+m;
+				return timeStr;
+			}
+
+
+	console.log(getTimeNow(new Date()));
+
+
+
+
+
+
+
+
+
+
+
+     function onAdd() {  
+		var nam = document.getElementById("nam").value;
+		var num  = document.getElementById("num").value;
+		var tel  = document.getElementById("tel").value;
+		var msg  = document.getElementById("msg").value;
+		var url = "https://wedding1002.wilddogio.com";
+        var ref = new Wilddog(url);
+        var times = getTimeNow(new Date());
+        
+		if(nam != ""){
+			ref.push({"nam":nam,
+			"num":num ,
+			"tel":tel ,
+			"msg":msg
+				});
+				document.getElementById("nam").value = "";
+		}else {
+			alert("姓名不能为空");
+		}
+			
+      }
+</script>  
+
+  
+    
+
+
+</body></html>
